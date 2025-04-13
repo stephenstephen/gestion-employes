@@ -4,7 +4,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '@/types/validations/login.schema';
 import { Button } from '@/components/ui/button';
-
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type LoginFormData = yup.InferType<typeof loginSchema>;
 
@@ -28,10 +29,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
       className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md"
     >
       <div>
-        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="username" className="block text-sm font-medium text-gray-700">
           Nom d'utilisateur
-        </label>
-        <input
+        </Label>
+        <Input
           id="username"
           type="text"
           {...register('username')}
@@ -43,10 +44,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading }) => {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Mot de passe
-        </label>
-        <input
+        </Label>
+        <Input
           id="password"
           type="password"
           {...register('password')}

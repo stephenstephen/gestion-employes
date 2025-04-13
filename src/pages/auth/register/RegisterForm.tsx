@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { registerSchema } from '@/types/validations/register.schema';
 
 type Props = {
@@ -31,7 +32,8 @@ export default function RegisterForm({ onSubmit, isLoading }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-[300px]">
       <div>
-        <Input {...register('username')} placeholder="Nom d'utilisateur" />
+        <Label htmlFor="username" className="text-sm text-gray-700">Nom d'utilisateur</Label>
+        <Input {...register('username')} id="username" />
         {errors.username && (
           <p className="text-sm text-red-600 mt-1">
             {errors.username.message}
@@ -40,10 +42,11 @@ export default function RegisterForm({ onSubmit, isLoading }: Props) {
       </div>
 
       <div>
+        <Label htmlFor="password" className="text-sm text-gray-700">Mot de passe</Label>
         <Input
           type="password"
           {...register('password')}
-          placeholder="Mot de passe"
+          id="password"
         />
         {errors.password && (
           <p className="text-sm text-red-600 mt-1">
@@ -53,10 +56,11 @@ export default function RegisterForm({ onSubmit, isLoading }: Props) {
       </div>
 
       <div>
+        <Label htmlFor="confirmPassword" className="text-sm text-gray-700">Confirmer le mot de passe</Label>
         <Input
           type="password"
           {...register('confirmPassword')}
-          placeholder="Confirmer le mot de passe"
+          id="confirmPassword"
         />
         {errors.confirmPassword && (
           <p className="text-sm text-red-600 mt-1">
