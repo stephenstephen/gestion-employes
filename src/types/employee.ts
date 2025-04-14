@@ -1,4 +1,4 @@
-export interface Employee {
+export interface Employee extends Record<string, unknown> {
   id: string;
   firstName: string;
   lastName: string;
@@ -23,12 +23,6 @@ export interface EmployeeUpdateDTO {
   exitDate: string;
 }
 
-export interface PaginatedResponse<T> {
-  items: T[];
-  totalPages: number;
-  totalCount: number;
-}
-  
 export interface PaginatedResponse<T> {
   items: T[];
   totalPages: number;

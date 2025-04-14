@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginRequest } from '@/services/auth.service';
-import { useAuth } from '@/hooks/useAuth';
 import { getErrorMessage } from '@/lib/utils';
-import LoginForm from './LoginForm';
+import LoginForm from '@/pages/auth/login/LoginForm';
+import { useAuth } from '@/context/AuthContext';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -33,12 +33,12 @@ const Login: React.FC = () => {
         {errorMessage && (
           <p className="mt-4 text-center text-sm text-red-600">{errorMessage}</p>
         )}
-      <p className="mt-4 text-center text-sm text-gray-600">
-        Pas encore de compte ?{' '}
-        <Link to="/register" className="text-blue-600 hover:underline">
-          Créez-en un ici
-        </Link>
-      </p>
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Pas encore de compte ?{' '}
+          <Link to="/register" className="text-blue-800 hover:underline">
+            Créez-en un ici
+          </Link>
+        </p>
       </div>
     </div>
   );

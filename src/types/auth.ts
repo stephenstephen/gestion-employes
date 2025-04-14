@@ -7,6 +7,11 @@ export interface LoginFormData {
     token: string;
   }
 
+  export interface User {
+    id: string;
+    username: string;
+  }
+
   export interface AuthContextType {
     isAuthenticated: boolean;
     login: (token: string) => void;

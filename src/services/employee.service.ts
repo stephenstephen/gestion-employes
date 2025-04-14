@@ -1,7 +1,6 @@
 import api from '@/lib/api';
 import { Employee, EmployeeCreateDTO, EmployeeUpdateDTO, PaginatedResponse } from '@/types/employee';
 
-// 2. API functions
 export const getEmployees = async (
   page = 1, 
   search = ''
@@ -25,7 +24,7 @@ export const createEmployee = async (
 };
 
 export const updateEmployee = async (
-  id: number,
+  id: string,
   updates: EmployeeUpdateDTO
 ): Promise<Employee> => {
   const { data } = await api.put(`/employees/${id}`, updates);
@@ -33,7 +32,7 @@ export const updateEmployee = async (
 };
 
 export const deleteEmployee = async (
-  id: number
+  id: string
 ): Promise<{ success: boolean }> => {
   const { data } = await api.delete(`/employees/${id}`);
   return data;

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { LogOut } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -28,7 +28,7 @@ const Header = () => {
               Déconnexion
             </Button>
         }
-        
+
       </div>
     </header>
   );

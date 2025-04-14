@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerRequest } from '@/services/auth.service';
 import { getErrorMessage } from '@/lib/utils';
-import RegisterForm from './RegisterForm';
+import RegisterForm from '@/pages/auth/register/RegisterForm';
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +40,12 @@ export default function Register() {
             {errorMessage}
           </p>
         )}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Vous avez déjà un compte ?{' '}
+          <Link to="/login" className="text-blue-800 hover:underline">
+            Connectez-vous ici
+          </Link>
+        </p>
       </div>
     </div>
   );

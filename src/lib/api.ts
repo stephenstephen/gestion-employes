@@ -1,25 +1,23 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 
-// 1. Définition des types
 declare module 'axios' {
   interface InternalAxiosRequestConfig {
     _retry?: boolean;
   }
 }
 
-// 2. Création de l'instance
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-  timeout: 10000, // 10s timeout
+  timeout: 10000,
 });
 
-// 3. Intercepteur de requête (typage amélioré)
+
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -28,7 +26,6 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 });
 
 
-// 4. Intercepteur de réponse (gestion centralisée des erreurs)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
