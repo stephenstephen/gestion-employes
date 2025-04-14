@@ -7,24 +7,43 @@ import { ErrorState, LoadingState } from '@/components/common/States';
 import { BackToDashboardButton } from '@/components/common/BackToDashboardButton';
 import { TableActionsProvider } from '@/context/TableActionContext';
 import { Employee } from '@/types/employee';
-import { deleteEmployee } from '@/services/employee.service';
+import { deleteEmployee, createEmployee, updateEmployee } from '@/services/employee.service';
 import { useAlert } from '@/hooks/useAlert';
 import { useQueryClient } from '@tanstack/react-query';
-
+import { Button } from '@/components/ui/button';
+import { EmployeeFormDialog } from '@/pages/employee/EmployeeFormDialog';
 
 const EmployeeList: React.FC = () => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  
+
   const queryClient = useQueryClient();
   const { data, isLoading, error } = useEmployees(pagination.pageIndex);
   const { showSuccess, showError } = useAlert();
 
-  const handleEdit = (employee: Employee) => {
-    console.log('Éditer:', employee);
+  const handleCreate = async (data: any) => {
+    try {
+      await createEmployee(data);
+      showSuccess('Employé ajouté', `${data.firstName} ${data.lastName} a bien été ajouté.`);
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+    } catch (err) {
+      showError('Erreur', 'Impossible d’ajouter l’employé.');
+    }
   };
+
+  const handleUpdate = async (data: any) => {
+
+    try {
+      await updateEmployee(data.id, data);
+      showSuccess('Employé modifié', `${data.firstName} ${data.lastName} a bien été modifié.`);
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+    } catch (err) {
+      showError('Erreur', 'Impossible de modifier l’employé.');
+    }
+  };
+
 
   const handleDelete = async (employee: Employee) => {
     try {
@@ -39,21 +58,25 @@ const EmployeeList: React.FC = () => {
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState />;
 
-
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold mb-4">Liste des employés</h1>
-        <BackToDashboardButton />
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-semibold">Liste des employés</h1>
+        <div className="flex gap-2">
+          <EmployeeFormDialog
+            trigger={<Button variant="blue">Ajouter un employé</Button>}
+            onSubmit={handleCreate}
+          />
+          <BackToDashboardButton />
+        </div>
       </div>
 
       <TableActionsProvider<Employee>
         actions={{
-          onEdit: handleEdit,
+          onEdit: handleUpdate,
           onDelete: handleDelete,
         }}
       >
-
         <DataTable
           data={data?.items || []}
           columns={EmployeeColumns}
@@ -62,7 +85,6 @@ const EmployeeList: React.FC = () => {
           pageCount={data?.totalPages ?? 1}
           globalFilterPlaceholder="Rechercher un employé..."
         />
-
       </TableActionsProvider>
     </div>
   );

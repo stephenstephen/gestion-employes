@@ -2,6 +2,7 @@ import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { useTableActions } from "@/context/TableActionContext";
 import { formatDate } from "@/lib/utils";
+import { EmployeeFormDialog } from "@/pages/employee/EmployeeFormDialog";
 import { Employee } from "@/types/employee";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -32,13 +33,13 @@ export const EmployeeColumns: ColumnDef<Employee>[] = [
 
       return (
         <div className="flex gap-2">
-          <Button
-            variant="blue"
-            size="sm"
-            onClick={() => onEdit?.(row.original)}
-          >
-            Modifier
-          </Button>
+
+          <EmployeeFormDialog
+            trigger={<Button variant="blue" size="sm">Modifier</Button>}
+            initialData={row.original}
+            onSubmit={(data) => onEdit?.({ ...row.original, ...data })}
+            title="Modifier un employé"
+          />
 
           <ConfirmDialog
             onConfirm={() => onDelete?.(row.original)}
