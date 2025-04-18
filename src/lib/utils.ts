@@ -10,6 +10,7 @@ export const getErrorMessage = (error: unknown): string => {
   return String(error);
 };
 
-export const formatDate = (iso: string) => {
+export const formatDate = (iso: string | null) => {
+  if (!iso) return 'N/A';
   return new Date(iso).toLocaleDateString('fr-FR');
 };

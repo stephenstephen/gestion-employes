@@ -3,10 +3,6 @@ import { toast } from 'sonner';
 export const useAlert = () => {
   const showSuccess = (title: string, description?: string) => {
 
-    console.log('====================================');
-    console.log('OKOKOK');
-    console.log('====================================');
-
     toast.success(title, {
       description,
     });

@@ -13,6 +13,14 @@ import {
 } from '@tanstack/react-table';
 import { Input } from '@/components/ui/input';
 import { TablePagination } from '@/components/table/TablePagination';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -63,7 +71,7 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder={globalFilterPlaceholder}
           value={globalFilter}
@@ -72,37 +80,39 @@ export function DataTable<TData>({
         />
       </div>
 
-      <div className="overflow-x-auto border rounded-md">
-        <table className="min-w-full bg-white">
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className="border-b">
-                {headerGroup.headers.map(header => (
-                  <th
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
                     key={header.id}
-                    className="text-left px-4 py-2 cursor-pointer"
+                    className="cursor-pointer"
                     onClick={header.column.getToggleSortingHandler()}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
-                    {header.column.getIsSorted() === 'asc' ? ' 🔼' : ''}
-                    {header.column.getIsSorted() === 'desc' ? ' 🔽' : ''}
-                  </th>
+                    <span className="ml-1">
+                      {header.column.getIsSorted() === 'asc' ? ' ↑' : ''}
+                      {header.column.getIsSorted() === 'desc' ? ' ↓' : ''}
+                    </span>
+                  </TableHead>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="border-b hover:bg-gray-50">
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className="px-4 py-2">
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       <TablePagination table={table} />

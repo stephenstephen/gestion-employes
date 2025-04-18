@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import MaskedDateInput from '@/components/common/MaskedDateInput';
 import { employeeSchema } from '@/types/validations/employee.schema';
 
 type FormValues = InferType<typeof employeeSchema>;
@@ -43,13 +44,19 @@ export const EmployeeForm: React.FC<Props> = ({
 
   const { handleSubmit, reset, control, formState: { errors } } = form;
 
+  const formatDate = (date: string) => {
+    if (!date) return date;
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  }
+
   useEffect(() => {
     if (initialData) {
       const { id, ...rest } = initialData;
       reset({
         ...defaultValues,
         ...rest,
-        dateOfBirth: rest.dateOfBirth?.split('T')[0], // Format pour input date
+        dateOfBirth: formatDate(rest.dateOfBirth),
         entryDate: rest.entryDate?.split('T')[0],
         exitDate: rest.exitDate?.split('T')[0]
       });
@@ -100,15 +107,13 @@ export const EmployeeForm: React.FC<Props> = ({
             <FormItem>
               <FormLabel>Date de naissance</FormLabel>
               <FormControl>
-                <Input 
-                  type="date"
+                <MaskedDateInput
                   {...field}
-                  value={field.value || ''}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
                 />
               </FormControl>
-              {errors.dateOfBirth && (
-                <FormMessage>{errors.dateOfBirth.message}</FormMessage>
-              )}
+              <FormMessage>{errors.dateOfBirth?.message}</FormMessage>
             </FormItem>
           )}
         />
