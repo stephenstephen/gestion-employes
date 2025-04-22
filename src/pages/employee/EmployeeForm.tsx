@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { InferType } from 'yup';
@@ -32,20 +32,24 @@ export const EmployeeForm: React.FC<Props> = ({
   const defaultValues: Partial<FormValues> = {
     firstName: '',
     lastName: '',
-    dateOfBirth: undefined,
+    dateOfBirth: '',
     entryDate: undefined,
     exitDate: undefined
   };
 
   const form = useForm<FormValues>({
     resolver: yupResolver(employeeSchema) as any,
-    defaultValues
+    defaultValues,
+    mode: 'onSubmit'
   });
 
   const { handleSubmit, reset, control, formState: { errors } } = form;
 
+  // Ajoutons un état local pour la date
+  const [localDateValue, setLocalDateValue] = useState('');
+
   const formatDate = (date: string) => {
-    if (!date) return date;
+    if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
   }
@@ -109,8 +113,21 @@ export const EmployeeForm: React.FC<Props> = ({
               <FormControl>
                 <MaskedDateInput
                   {...field}
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
+                  value={localDateValue || field.value || ''}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setLocalDateValue(newValue);
+                    if (newValue.length === 10) {
+                      field.onChange(newValue);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const value = e.target.value;
+                    if (value.length === 10) {
+                      field.onChange(value);
+                      field.onBlur();
+                    }
+                  }}
                 />
               </FormControl>
               <FormMessage>{errors.dateOfBirth?.message}</FormMessage>

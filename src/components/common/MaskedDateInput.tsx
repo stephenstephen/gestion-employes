@@ -6,12 +6,11 @@ import { Input } from '@/components/ui/input';
 interface MaskedDateInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const MaskedDateInput = React.forwardRef<HTMLInputElement, MaskedDateInputProps>((props, ref) => {
-  
   const options = maskitoDateOptionsGenerator({
-		mode: 'dd/mm/yyyy',
-		separator: '/',
-	});
-	
+    mode: 'dd/mm/yyyy',
+    separator: '/'
+  });
+  
   const maskitoRef = useMaskito({ options });
 
   return (

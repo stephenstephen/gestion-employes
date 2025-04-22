@@ -32,11 +32,21 @@ export function EmployeeFormDialog({
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleFormSubmit = (data: FormValues) => {
-    onSubmit({
-      ...data,
-      dateOfBirth: formatDate(data.dateOfBirth || '')
-    });
-    setDialogOpen(false);
+    console.log('Données reçues dans le dialog:', data);
+    
+    // Ne formatons la date que si elle existe et est au bon format
+    if (data.dateOfBirth && data.dateOfBirth.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+      const formattedDate = formatDate(data.dateOfBirth);
+      console.log('Date formatée:', formattedDate);
+      
+      onSubmit({
+        ...data,
+        dateOfBirth: formattedDate
+      });
+      setDialogOpen(false);
+    } else {
+      console.log('Format de date invalide dans le dialog');
+    }
   };
 
   return (
@@ -64,5 +74,6 @@ export function EmployeeFormDialog({
 const formatDate = (date: string): string => {
   if (!date) return '';
   const [day, month, year] = date.split('/');
+  if (!day || !month || !year) return '';
   return `${year}-${month}-${day}`;
 };

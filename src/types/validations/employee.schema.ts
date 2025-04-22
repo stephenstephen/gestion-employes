@@ -7,15 +7,12 @@ export const employeeSchema = yup.object({
   dateOfBirth: yup
     .string()
     .required('Date de naissance requise')
-    .test('valid-date', 'Format de date invalide', (value) =>
-      moment(value, 'DD/MM/YYYY', true).isValid()
-    )
-    .test('not-in-future', 'La date ne peut pas être dans le futur', (value) =>
-      moment(value, 'DD/MM/YYYY').isSameOrBefore(moment())
-    )
-    .test('minimum-age', 'L\'âge doit être d\'au moins 18 ans', (value) =>
-      moment().diff(moment(value, 'DD/MM/YYYY'), 'years') >= 18
-    ),
+    .test('valid-date', 'Date invalide', (value) => {
+      if (!value || value.length < 10) return true;
+      return moment(value, 'DD/MM/YYYY', true).isValid() &&
+             moment(value, 'DD/MM/YYYY').isSameOrBefore(moment()) &&
+             moment().diff(moment(value, 'DD/MM/YYYY'), 'years') >= 18;
+    }),
   entryDate: yup.string().required("Date d'entrée requise"),
   exitDate: yup.string().nullable().notRequired(),
 });
