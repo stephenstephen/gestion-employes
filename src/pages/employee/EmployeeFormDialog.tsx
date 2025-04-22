@@ -13,7 +13,7 @@ import { employeeSchema } from '@/types/validations/employee.schema';
 import type { InferType } from 'yup';
 
 interface EmployeeFormDialogProps {
-  onSubmit: (data: Omit<Employee, 'id'>) => void;
+  onSubmit: (data: Omit<Employee, 'id'>) => Promise<void>;
   trigger?: React.ReactNode;
   initialData?: Employee;
   title?: string;
@@ -30,22 +30,25 @@ export function EmployeeFormDialog({
   submitLabel = 'Enregistrer',
 }: EmployeeFormDialogProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFormSubmit = (data: FormValues) => {
-    console.log('Données reçues dans le dialog:', data);
-    
-    // Ne formatons la date que si elle existe et est au bon format
-    if (data.dateOfBirth && data.dateOfBirth.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+  const handleFormSubmit = async (data: FormValues) => {
+    if (!data.dateOfBirth || !data.dateOfBirth.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
       const formattedDate = formatDate(data.dateOfBirth);
-      console.log('Date formatée:', formattedDate);
-      
-      onSubmit({
+      await onSubmit({
         ...data,
         dateOfBirth: formattedDate
       });
       setDialogOpen(false);
-    } else {
-      console.log('Format de date invalide dans le dialog');
+    } catch (error) {
+      console.error('Erreur lors de la soumission:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

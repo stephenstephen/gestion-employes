@@ -29,21 +29,21 @@ const EmployeeList: React.FC = () => {
       showSuccess('Employé ajouté', `${data.firstName} ${data.lastName} a bien été ajouté.`);
       queryClient.invalidateQueries({ queryKey: ['employees'] });
     } catch (err) {
-      showError('Erreur', 'Impossible d’ajouter l’employé.');
+      showError('Erreur', 'Impossible d\'ajouter l\'employé.');
+      throw err;
     }
   };
 
   const handleUpdate = async (data: any) => {
-
     try {
       await updateEmployee(data.id, data);
       showSuccess('Employé modifié', `${data.firstName} ${data.lastName} a bien été modifié.`);
       queryClient.invalidateQueries({ queryKey: ['employees'] });
     } catch (err) {
-      showError('Erreur', 'Impossible de modifier l’employé.');
+      showError('Erreur', 'Impossible de modifier l\'employé.');
+      throw err;
     }
   };
-
 
   const handleDelete = async (employee: Employee) => {
     try {
